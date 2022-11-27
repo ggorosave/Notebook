@@ -1,10 +1,14 @@
+// empty variables
 let noteTitle;
 let noteText;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+// checks if the window's location is on the notes path
 if (window.location.pathname === '/notes') {
+
+  // gives variables values for the notes page
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
   saveNoteBtn = document.querySelector('.save-note');
@@ -25,6 +29,7 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
+// function that gets the note date from the db
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -50,6 +55,7 @@ const deleteNote = (id) =>
     },
   });
 
+  // renders note in the right column
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
@@ -108,6 +114,7 @@ const handleNewNoteView = (e) => {
   renderActiveNote();
 };
 
+// Checks if there is text in the inputs and only shows the save button if there is
 const handleRenderSaveBtn = () => {
   if (!noteTitle.value.trim() || !noteText.value.trim()) {
     hide(saveNoteBtn);
