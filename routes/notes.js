@@ -2,31 +2,44 @@ const notes = require('express').Router();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
+
 // GET route for retrieving all data
-notes.get('/', (res, req) => {
-    fs.readFile('./db/db.json', 'utf8', (error, data) =>
-    error ? console.error(error) : console.log(data))
-    .then((data) => {
-        res.json(JSON.parse(data));
+notes.get('/', (req, res) => {
+
+    fs.readFile('./db/db.json', 'utf8', (error, data) => {
+        error ? console.error(error) : res.json(JSON.parse(data))
     });
+
 });
 
 // Route for submitting notes
-notes.post('/', (res, req) => {
+notes.post('/', (req, res) => {
 
     // destructering the items in req.body
-    const { title, text } = req.body
+    const { title, text } = req.body;
 
     // Checks for the required properties
     if (title && text) {
         const newNote = {
             title,
-            test,
+            text,
             id: uuidv4(),
         }
 
-        fs.appendFile('./db/db.json', newNote, (error) =>
-        error ? console.error(error) : console.log('New note added to database!'))
+
+        fs.readFile('./db/db.json', 'utf8', (error, data) => {
+            if (error) {
+                console.error(error);
+            } else {
+                const parsedData = JSON.parse(data);
+                parsedData.push(newNote);
+                console.log(parsedData);
+                fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (error) => error ? console.log(error) : console.log('New note added'))
+
+                // console.log(data);
+                // console.log(newNote);
+            }
+        });
 
         const response = {
             status: 'success',
