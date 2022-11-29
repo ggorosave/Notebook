@@ -1,5 +1,4 @@
 const express = require('express');
-
 // imports router
 const notesRouter = require('./notes');
 
