@@ -1,8 +1,7 @@
 const express = require('express');
 const path = require('path');
+// imports routes
 const api = require('./routes/index.js')
-
-// Middleware?
 
 const PORT = process.env.PORT || 3001;
 
@@ -13,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', api);
 
+// Lets us reference files with their relative paths instead of making a route for each individually
 app.use(express.static('public'));
 
 // GET Route for homepage
