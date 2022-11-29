@@ -28,21 +28,24 @@ notes.post('/', (req, res) => {
             id: uuidv4(),
         }
 
-        // Calls the fs method to read the file, parses the data from the json file, pushes the new note to the existing array pulled from the data, the calls the fs method to rewrite the file containing the new note 
+        // Calls the fs method to read the file 
         fs.readFile('./db/db.json', 'utf8', (error, data) => {
             if (error) {
                 console.error(error);
             } else {
+                // parses data from json file (should be an array)
                 const parsedData = JSON.parse(data);
+
+                // pushes new note into array of data
                 parsedData.push(newNote);
                 
-                // The '4' in the stringify method indicates that there should be 4 tabs after every property
-                fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (error) => error ? console.log(error) : console.log('New note added'))
+                // Rewrites the file using the data with the new note. The '4' in the stringify method indicates that there should be 4 tabs after every property so it renders nicely in the file.
+                fs.writeFile('./db/db.json', JSON.stringify(parsedData, null, 4), (error) => error ? console.log(error) : console.log('New note added'));
 
             }
         });
 
-        // builds a response object to sent to the client
+        // builds a response object to send to the client
         const response = {
             status: 'success',
             body: newNote,
@@ -63,7 +66,7 @@ notes.delete('/:id', (req, res) => {
     // variable that has the value of the parameter id
     const noteId = req.params.id;
     
-
+    // retrieves data from json file
     fs.readFile('./db/db.json', 'utf8', (error, data) => {
         if (error) {
             console.error(error);
@@ -71,10 +74,10 @@ notes.delete('/:id', (req, res) => {
             // parses the data from the json file
            const parsedData = JSON.parse(data);
 
-            // creates a new array that filters out the note with the given id from the parameter
+            // creates a new array that filters out the note with the given id 
            const result = parsedData.filter((note) => note.id !== noteId);
   
-            // rewrites the json file without the note with the matching id
+            // rewrites the json file without the delted note
            fs.writeFile('./db/db.json', JSON.stringify(result, null, 4), (error) => error ? console.log(error) : console.log(`Note deleted`));
             
             // sends response to client
